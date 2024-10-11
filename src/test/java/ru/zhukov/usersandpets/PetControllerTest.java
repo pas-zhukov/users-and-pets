@@ -71,6 +71,11 @@ public class PetControllerTest {
     }
 
     @Test
+    public void shouldSuccessUpdatePet() throws Exception {
+        throw new Exception();
+    }
+
+    @Test
     public void shouldNotCreatePetWhenRequestNotValid() throws Exception{
         PetDto pet = new PetDto(null, "", null);
         String petJson = objectMapper.writeValueAsString(pet);

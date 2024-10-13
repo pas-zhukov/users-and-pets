@@ -58,7 +58,7 @@ public class PetControllerTest {
         PetDto pet = petService.createPet("Бобик", user.getId());
 
         String gotPetJson = mockMvc.perform(get("/pets/{id}", pet.getId()))
-                .andExpect(status().is(HttpStatus.FOUND.value()))
+                .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

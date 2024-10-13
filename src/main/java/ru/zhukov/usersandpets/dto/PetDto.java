@@ -1,21 +1,18 @@
 package ru.zhukov.usersandpets.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PetDto {
-    @Min(1L)
+    @Null
     private Long id;
-    @NotNull
     @NotBlank
     private String name;
     @NotNull
-    @Min(0L)
+    @Positive
     private Long userId;
 
     public PetDto() {
@@ -27,27 +24,27 @@ public class PetDto {
         this.userId = userId;
     }
 
-    public Long getId() {
+    public @Null Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(@Null Long id) {
         this.id = id;
     }
 
-    public @NotNull @NotBlank String getName() {
+    public @NotBlank String getName() {
         return name;
     }
 
-    public void setName(@NotNull @NotBlank String name) {
+    public void setName(@NotBlank String name) {
         this.name = name;
     }
 
-    public @NotNull @Min(0L) Long getUserId() {
+    public @NotNull @Positive Long getUserId() {
         return userId;
     }
 
-    public void setUserId(@NotNull @Min(0L) Long userId) {
+    public void setUserId(@NotNull @Positive Long userId) {
         this.userId = userId;
     }
 

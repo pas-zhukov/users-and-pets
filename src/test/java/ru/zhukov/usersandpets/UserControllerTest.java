@@ -45,7 +45,7 @@ public class UserControllerTest {
         String createdUserJson = mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJson))
-                .andExpect(status().is(HttpStatus.CREATED.value()))
+                .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -72,7 +72,7 @@ public class UserControllerTest {
         String createdUserJson = mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().is(HttpStatus.CREATED.value()))
+                .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -93,12 +93,12 @@ public class UserControllerTest {
 
     @Test
     public void shouldSuccessGetUserById() throws Exception {
-        UserDto user = userService.createUser("Паша", "pas-zhukov@yandex.ru", 25);
-        PetDto pet = petService.createPet("Бобик", user.getId());
+        UserDto user = userService.createUser("Pasha", "pas-zhukov@yandex.ru", 25);
+        PetDto pet = petService.createPet("Bobik", user.getId());
         user.setPets(List.of(pet));
 
         String gotUserJson = mockMvc.perform(get("/users/{id}", user.getId()))
-                .andExpect(status().is(HttpStatus.FOUND.value()))
+                .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -129,6 +129,11 @@ public class UserControllerTest {
     void shouldReturnNotFoundWhenUserNotPresent() throws Exception {
         mockMvc.perform(get("/users/{id}", Long.MAX_VALUE))
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenTryToDeleteUserWithPets() throws Exception {
+        throw new Exception();
     }
 
 }

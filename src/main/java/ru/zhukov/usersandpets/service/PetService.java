@@ -6,6 +6,7 @@ import ru.zhukov.usersandpets.dto.PetDto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class PetService {
@@ -41,11 +42,15 @@ public class PetService {
         try {
             return pets.get(petId);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Pet with id %s not found".formatted(petId));
+            throw new NoSuchElementException("Pet with id %s not found".formatted(petId));
         }
     }
 
     public List<PetDto> getAllPets() {
         return pets.values().stream().toList();
+    }
+
+    public PetDto createPet(PetDto petToCreate) {
+        return createPet(petToCreate.getName(), petToCreate.getUserId());
     }
 }

@@ -1,23 +1,24 @@
 package ru.zhukov.usersandpets.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
 import java.util.Objects;
 
 public class UserDto {
-    @Min(1L)
+    @Null
     private Long id;
-    @NotNull
     @NotBlank
     private String name;
     @NotNull
     @Email
     private String email;
-    @Min(0L)
+    @Positive
     @Max(150L)
     @NotNull
     private Integer age;
+    @Valid
     private List<PetDto> pets;
 
     public UserDto() {
@@ -31,19 +32,19 @@ public class UserDto {
         this.pets = pets;
     }
 
-    public Long getId() {
+    public @Null Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(@Null Long id) {
         this.id = id;
     }
 
-    public @NotNull @NotBlank String getName() {
+    public @NotBlank String getName() {
         return name;
     }
 
-    public void setName(@NotNull @NotBlank String name) {
+    public void setName(@NotBlank String name) {
         this.name = name;
     }
 
@@ -69,6 +70,14 @@ public class UserDto {
 
     public void setPets(List<PetDto> pets) {
         this.pets = pets;
+    }
+
+    public void addPet(PetDto pet) {
+        this.pets.add(pet);
+    }
+
+    public void removePet(PetDto pet) {
+        this.pets.remove(pet);
     }
 
     @Override

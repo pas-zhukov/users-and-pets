@@ -10,9 +10,10 @@ public class PetDto {
     @Null
     private Long id;
     @NotBlank
+    @Size(max = 25, message = "Name must be less than 25 characters")
     private String name;
-    @NotNull
-    @Positive
+    @NotNull(message = "User ID must be specified")
+    @Positive(message = "User ID must be a positive number")
     private Long userId;
 
     public PetDto() {

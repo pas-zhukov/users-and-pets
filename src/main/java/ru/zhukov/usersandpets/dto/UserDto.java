@@ -10,15 +10,16 @@ public class UserDto {
     @Null
     private Long id;
     @NotBlank
+    @Size(max = 25, message = "Name must be less than 25 characters")
     private String name;
     @NotNull
     @Email
     private String email;
-    @Positive
-    @Max(150L)
-    @NotNull
+    @Positive(message = "Age must be a positive number")
+    @Max(value = 150L, message = "Age must be less than 150")
+    @NotNull(message = "Age must be specified")
     private Integer age;
-    @Valid
+    @Null(message = "Pets must be added separately")
     private List<PetDto> pets;
 
     public UserDto() {

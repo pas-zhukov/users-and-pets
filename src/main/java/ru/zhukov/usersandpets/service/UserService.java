@@ -1,6 +1,5 @@
 package ru.zhukov.usersandpets.service;
 
-import jakarta.validation.Valid;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.zhukov.usersandpets.dto.PetDto;
@@ -32,11 +31,7 @@ public class UserService {
         user.setName(newUser.getName());
         user.setEmail(newUser.getEmail());
         user.setAge(newUser.getAge());
-        return null; // TODO
-    }
-
-    public Boolean isUserPetsUpdateValid(UserDto currentUser, UserDto updatedUser) {
-        return null; // TODO
+        return user;
     }
 
     public void deleteUser(Long userId) {
@@ -44,13 +39,14 @@ public class UserService {
         if (!user.getPets().isEmpty()) {
             throw new RestrictedOperationException("User with pets can't be deleted");
         } else {
-            users.remove(userId); // TODO? проверка на null?
+            users.remove(userId);
         }
     }
 
     public UserDto addPetToUser(Long userId, PetDto pet) {
         UserDto user = getUserById(userId);
         user.addPet(pet);
+        pet.setUserId(userId);
         return user;
     }
 
@@ -69,10 +65,10 @@ public class UserService {
     }
 
     public UserDto createUser(UserDto userToCreate) {
-        UserDto user = createUser(userToCreate.getName(), userToCreate.getEmail(), userToCreate.getAge());
-        userToCreate.getPets().stream()
-                .map(petService::createPet)
-                .forEach(pet -> addPetToUser(user.getId(), pet));
-        return user;
+        return createUser(userToCreate.getName(), userToCreate.getEmail(), userToCreate.getAge());
+    }
+
+    public void raiseOnUserDoesNotExist(Long userId) {
+        getUserById(userId);
     }
 }

@@ -17,8 +17,7 @@ import ru.zhukov.usersandpets.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -45,7 +44,7 @@ public class UserControllerTest {
         String createdUserJson = mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJson))
-                .andExpect(status().is(HttpStatus.OK.value()))
+                .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -61,7 +60,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldSuccessOnUserWithPetCreated() throws Exception {
+    public void shouldNotCreateUserWithPet() throws Exception {
         UserDto user = new UserDto(null,
                 "Pasha",
                 "pas-zhukov@yandex.ru",
@@ -69,26 +68,10 @@ public class UserControllerTest {
                 List.of(new PetDto(null, "Jack", null)));
         String userJson = objectMapper.writeValueAsString(user);
 
-        String createdUserJson = mockMvc.perform(post("/users")
+        mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().is(HttpStatus.OK.value()))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        UserDto createdUser = objectMapper.readValue(createdUserJson, UserDto.class);
-
-        Assertions.assertNotNull(createdUser.getId());
-        Assertions.assertEquals(user.getName(), createdUser.getName());
-        Assertions.assertEquals(user.getEmail(), createdUser.getEmail());
-        Assertions.assertEquals(user.getAge(), createdUser.getAge());
-
-        Assertions.assertNotNull(createdUser.getPets());
-        Assertions.assertFalse(createdUser.getPets().isEmpty());
-        Assertions.assertEquals(1, createdUser.getPets().size());
-        Assertions.assertNotNull(createdUser.getPets().get(0).getId());
-        Assertions.assertNotNull(createdUser.getPets().get(0).getUserId());
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
     }
 
     @Test
@@ -133,7 +116,13 @@ public class UserControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenTryToDeleteUserWithPets() throws Exception {
-        throw new Exception();
+        UserDto createdUser = userService.createUser("Pasha",
+                "pas-zhukov@yandex.ru", 25);
+        petService.createPet("Jack", createdUser.getId());
+
+        mockMvc.perform(delete("/users/" + createdUser.getId()))
+                .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+
     }
 
 }

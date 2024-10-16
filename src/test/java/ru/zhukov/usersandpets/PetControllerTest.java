@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.zhukov.usersandpets.dto.PetDto;
 import ru.zhukov.usersandpets.dto.UserDto;
 import ru.zhukov.usersandpets.service.PetService;
@@ -38,8 +37,8 @@ public class PetControllerTest {
         String petJson = objectMapper.writeValueAsString(pet);
 
         String createdPetJson = mockMvc.perform(post("/pets")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(petJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petJson))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn()
                 .getResponse()
@@ -78,8 +77,8 @@ public class PetControllerTest {
         String petWithUpdatedNameJson = objectMapper.writeValueAsString(new PetDto(null, "Bob", createdUser.getId()));
 
         String updatedPetJson = mockMvc.perform(put("/pets/" + createdPet.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(petWithUpdatedNameJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petWithUpdatedNameJson))
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andReturn()
                 .getResponse()
@@ -92,13 +91,13 @@ public class PetControllerTest {
     }
 
     @Test
-    public void shouldNotCreatePetWhenRequestNotValid() throws Exception{
+    public void shouldNotCreatePetWhenRequestNotValid() throws Exception {
         PetDto pet = new PetDto(null, "", null);
         String petJson = objectMapper.writeValueAsString(pet);
 
         mockMvc.perform(post("/pets")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(petJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(petJson))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
     }
 

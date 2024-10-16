@@ -14,7 +14,6 @@ import ru.zhukov.usersandpets.dto.UserDto;
 import ru.zhukov.usersandpets.service.PetService;
 import ru.zhukov.usersandpets.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,8 +41,8 @@ public class UserControllerTest {
         String userJson = objectMapper.writeValueAsString(user);
 
         String createdUserJson = mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(userJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
                 .andExpect(status().is(HttpStatus.CREATED.value()))
                 .andReturn()
                 .getResponse()

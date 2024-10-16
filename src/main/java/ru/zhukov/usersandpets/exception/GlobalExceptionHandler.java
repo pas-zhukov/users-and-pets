@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
-        ServerErrorDto errorDto =  new ServerErrorDto(
+        ServerErrorDto errorDto = new ServerErrorDto(
                 "Ошибка валидации запроса",
                 detailedMessage,
                 LocalDateTime.now()
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
             Exception e
     ) {
         log.error("Server error", e);
-        ServerErrorDto errorDto =  new ServerErrorDto(
+        ServerErrorDto errorDto = new ServerErrorDto(
                 "Server error",
                 e.getMessage(),
                 LocalDateTime.now()
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
             NoSuchElementException e
     ) {
         log.error("Got exception", e);
-        ServerErrorDto errorDto =  new ServerErrorDto(
+        ServerErrorDto errorDto = new ServerErrorDto(
                 "Сущность не найдена",
                 e.getMessage(),
                 LocalDateTime.now()
@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
             RuntimeException e
     ) {
         log.error("Got exception", e);
-        ServerErrorDto errorDto =  new ServerErrorDto(
+        ServerErrorDto errorDto = new ServerErrorDto(
                 "Действие запрещено",
                 e.getMessage(),
                 LocalDateTime.now()

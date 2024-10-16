@@ -1,6 +1,5 @@
 package ru.zhukov.usersandpets.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.List;

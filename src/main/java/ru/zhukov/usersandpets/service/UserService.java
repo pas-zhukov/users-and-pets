@@ -1,6 +1,5 @@
 package ru.zhukov.usersandpets.service;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.zhukov.usersandpets.dto.PetDto;
 import ru.zhukov.usersandpets.dto.UserDto;
@@ -12,13 +11,7 @@ import java.util.*;
 public class UserService {
 
     private final Map<Long, UserDto> users = new HashMap<>();
-    private final PetService petService;
     private Long idCounter = 0L;
-
-    @Lazy
-    public UserService(PetService petService) {
-        this.petService = petService;
-    }
 
     public UserDto createUser(String name, String mail, int age) {
         UserDto user = new UserDto(++idCounter, name, mail, age, new ArrayList<>());
@@ -43,17 +36,15 @@ public class UserService {
         }
     }
 
-    public UserDto addPetToUser(Long userId, PetDto pet) {
+    public void addPetToUser(Long userId, PetDto pet) {
         UserDto user = getUserById(userId);
         user.addPet(pet);
         pet.setUserId(userId);
-        return user;
     }
 
-    public UserDto removePetFromUser(Long userId, Long petId) {
+    public void removePetFromUser(Long userId, Long petId) {
         UserDto user = getUserById(userId);
-        user.getPets().removeIf(pet -> pet.getId().equals(petId)); // TODO: под вопросом
-        return user;
+        user.getPets().removeIf(pet -> pet.getId().equals(petId));
     }
 
     public UserDto getUserById(Long userId) throws NoSuchElementException {

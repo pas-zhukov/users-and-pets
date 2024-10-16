@@ -15,8 +15,7 @@ import ru.zhukov.usersandpets.dto.UserDto;
 import ru.zhukov.usersandpets.service.PetService;
 import ru.zhukov.usersandpets.service.UserService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -33,8 +32,8 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessCreatePet() throws Exception {
-        UserDto user = userService.createUser("Паша", "pas-zhukov@yandex.ru", 25);
-        PetDto pet = new PetDto(null, "Шарик", user.getId());
+        UserDto user = userService.createUser("Petya", "pas-zhukov@yandex.ru", 25);
+        PetDto pet = new PetDto(null, "Sharik", user.getId());
 
         String petJson = objectMapper.writeValueAsString(pet);
 
@@ -54,8 +53,8 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessGetPetById() throws Exception {
-        UserDto user = userService.createUser("Паша", "pas-zhukov@yandex.ru", 25);
-        PetDto pet = petService.createPet("Бобик", user.getId());
+        UserDto user = userService.createUser("Pasha", "pas-zhukov@yandex.ru", 25);
+        PetDto pet = petService.createPet("Bobik", user.getId());
 
         String gotPetJson = mockMvc.perform(get("/pets/{id}", pet.getId()))
                 .andExpect(status().is(HttpStatus.OK.value()))
@@ -72,7 +71,24 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessUpdatePet() throws Exception {
-        throw new Exception();
+        UserDto createdUser = userService.createUser("Pasha",
+                "pas-zhukov@yandex.ru", 25);
+        PetDto createdPet = petService.createPet("Jack", createdUser.getId());
+
+        String petWithUpdatedNameJson = objectMapper.writeValueAsString(new PetDto(null, "Bob", createdUser.getId()));
+
+        String updatedPetJson = mockMvc.perform(put("/pets/" + createdPet.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(petWithUpdatedNameJson))
+                .andExpect(status().is(HttpStatus.OK.value()))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        PetDto updatedPet = objectMapper.readValue(updatedPetJson, PetDto.class);
+
+        Assertions.assertEquals("Bob", updatedPet.getName());
+        Assertions.assertEquals(createdUser.getId(), updatedPet.getUserId());
     }
 
     @Test

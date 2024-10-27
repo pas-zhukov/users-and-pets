@@ -17,7 +17,9 @@ public class PetService {
         this.userService = userService;
     }
 
-    public PetDto createPet(String name, Long userId) {
+    public PetDto createPet(PetDto petToCreate) {
+        Long userId = petToCreate.getUserId();
+        String name = petToCreate.getName();
         userService.raiseOnUserDoesNotExist(userId);
         PetDto pet = new PetDto(++idCounter, name, userId);
         pets.put(pet.getId(), pet);
@@ -46,10 +48,6 @@ public class PetService {
 
     public List<PetDto> getAllPets() {
         return pets.values().stream().toList();
-    }
-
-    public PetDto createPet(PetDto petToCreate) {
-        return createPet(petToCreate.getName(), petToCreate.getUserId());
     }
 
     public void raiseOnPetDoesNotExist(Long petId) {

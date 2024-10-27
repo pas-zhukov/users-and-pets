@@ -31,7 +31,7 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessCreatePet() throws Exception {
-        UserDto user = userService.createUser("Petya", "pas-zhukov@yandex.ru", 25);
+        UserDto user = userService.createUser(new UserDto(null, "Petya", "pas-zhukov@yandex.ru", 25, null));
         PetDto pet = new PetDto(null, "Sharik", user.getId());
 
         String petJson = objectMapper.writeValueAsString(pet);
@@ -52,8 +52,8 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessGetPetById() throws Exception {
-        UserDto user = userService.createUser("Pasha", "pas-zhukov@yandex.ru", 25);
-        PetDto pet = petService.createPet("Bobik", user.getId());
+        UserDto user = userService.createUser(new UserDto(null, "Pasha", "pas-zhukov@yandex.ru", 25, null));
+        PetDto pet = petService.createPet(new PetDto(null, "Bob", user.getId()));
 
         String gotPetJson = mockMvc.perform(get("/pets/{id}", pet.getId()))
                 .andExpect(status().is(HttpStatus.OK.value()))
@@ -70,9 +70,8 @@ public class PetControllerTest {
 
     @Test
     public void shouldSuccessUpdatePet() throws Exception {
-        UserDto createdUser = userService.createUser("Pasha",
-                "pas-zhukov@yandex.ru", 25);
-        PetDto createdPet = petService.createPet("Jack", createdUser.getId());
+        UserDto createdUser = userService.createUser(new UserDto(null, "Pasha", "pas-zhukov@yandex.ru", 25, null));
+        PetDto createdPet = petService.createPet(new PetDto(null, "Jack", createdUser.getId()));
 
         String petWithUpdatedNameJson = objectMapper.writeValueAsString(new PetDto(null, "Bob", createdUser.getId()));
 

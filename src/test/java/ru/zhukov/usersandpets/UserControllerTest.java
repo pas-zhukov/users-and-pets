@@ -75,8 +75,8 @@ public class UserControllerTest {
 
     @Test
     public void shouldSuccessGetUserById() throws Exception {
-        UserDto user = userService.createUser("Pasha", "pas-zhukov@yandex.ru", 25);
-        PetDto pet = petService.createPet("Bobik", user.getId());
+        UserDto user = userService.createUser(new UserDto(null, "Petya", "pas-zhukov@yandex.ru", 25, null));
+        PetDto pet = petService.createPet(new PetDto(null, "Bobik", user.getId()));
         user.setPets(List.of(pet));
 
         String gotUserJson = mockMvc.perform(get("/users/{id}", user.getId()))
@@ -115,9 +115,8 @@ public class UserControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenTryToDeleteUserWithPets() throws Exception {
-        UserDto createdUser = userService.createUser("Pasha",
-                "pas-zhukov@yandex.ru", 25);
-        petService.createPet("Jack", createdUser.getId());
+        UserDto createdUser = userService.createUser(new UserDto(null, "Pasha", "pas-zhukov@yandex.ru", 25, null));
+        petService.createPet(new PetDto(null, "Bobik", createdUser.getId()));
 
         mockMvc.perform(delete("/users/" + createdUser.getId()))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));

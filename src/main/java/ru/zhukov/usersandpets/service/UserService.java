@@ -13,8 +13,8 @@ public class UserService {
     private final Map<Long, UserDto> users = new HashMap<>();
     private Long idCounter = 0L;
 
-    public UserDto createUser(String name, String mail, int age) {
-        UserDto user = new UserDto(++idCounter, name, mail, age, new ArrayList<>());
+    public UserDto createUser(UserDto userToCreate) {
+        UserDto user = new UserDto(++idCounter, userToCreate.getName(), userToCreate.getEmail(), userToCreate.getAge(), new ArrayList<>());
         users.put(user.getId(), user);
         return user;
     }
@@ -53,10 +53,6 @@ public class UserService {
 
     public List<UserDto> getAllUsers() {
         return users.values().stream().toList();
-    }
-
-    public UserDto createUser(UserDto userToCreate) {
-        return createUser(userToCreate.getName(), userToCreate.getEmail(), userToCreate.getAge());
     }
 
     public void raiseOnUserDoesNotExist(Long userId) {
